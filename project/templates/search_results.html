@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Poem{% endblock %}
+
+{% block main %}
+{% if poems %}
+        <ul>
+            {% for poem in poems %}
+                <li>
+                    <h3>{{ poem.title }}</h3>
+                    <p>{{ poem.author }}</p>
+                    <p>{{ poem.lines | join('<br>') }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+{% endblock %}
