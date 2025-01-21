@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='search_results.css') }}">
+{% endblock %}
+
+{% block title %}My Favorite Poems{% endblock %}
+
+<!--Used Claude AI to build out the poem container-->
+{% block main %}
+<div class="container">
+    <div class="results-bar">
+        <h4 class="my-4">My Favorite Poems</h4>
+    </div>
+
+    {% if saved_poems %}
+    <div class="row justify-content-center">
+        {% for poem in saved_poems %}
+        <div class="col-10 col-md-8 col-lg-6 mb-4 mx-auto">
+            <div class="card h-100">
+                <div class="card-body">
+                    <!-- Heart Icon for favorites -->
+                    <div class="favorite-container">
+                        <i class="bi bi-heart-fill favorite-icon" data-poem-id="{{ poem.id }}"
+                            style="cursor: pointer;"></i>
+                    </div>
+                    <h5 class="card-title">{{ poem.title }}</h5>
+                    <div class="poem-lines mt-3">
+                        {% for line in poem.text.split('\n') %}
+                        <p>{{ line }}</p>
+                        {% endfor %}
+                    </div>
+                    <h6 class="card-subtitle mb-2 text-muted" style="margin-bottom: 50px;"> ~ by {{ poem.author }} ~
+                    </h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!--Pagination Navigation, Source: https://getbootstrap.com/docs/5.3/components/pagination/-->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('saved_poems', page=page-1) }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% set window_size = 5 %}
+            {% set start_page = page - (window_size // 2) %}
+            {% if start_page < 1 %}{% set start_page=1 %}{% endif %} {% set end_page=start_page + window_size - 1 %} {%
+                if end_page> total_pages %}
+                {% set end_page = total_pages %}
+                {% set start_page = end_page - window_size // 2 %}
+                {% endif %}
+
+                {% for p in range(start_page, end_page + 1) %}
+                {% if p > 0 %} {# this is the fix #}
+                <li class="page-item {{ 'active' if p == page else '' }}">
+                    <a class="page-link" href="{{ url_for('saved_poems', page=p) }}">{{ p }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page < total_pages %} <li class="page-item">
+                    <a class="page-link" href="{{ url_for('saved_poems', page=page+1) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                    </li>
+                    {% endif %}
+        </ul>
+    </nav>
+
+    {% else %}
+    <div class="alert alert-info">
+        You haven't saved any poems yet. Search for poems to add them to your favorites!
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    /* Event listener for the favorite button */
+    document.addEventListener('DOMContentLoaded', () => {
+        const favoriteIcons = document.querySelectorAll('.favorite-icon');
+
+        favoriteIcons.forEach(icon => {
+            // Get the poem data from the closest card
+            icon.addEventListener('click', async function () {
+                const cardBody = this.closest('.card-body');
+                const title = cardBody.querySelector('.card-title').textContent;
+                const author = cardBody.querySelector('.card-subtitle').textContent.replace(/^~ by /, '').replace(/ ~$/, '');
+                const lines = Array.from(cardBody.querySelectorAll('.poem-lines p')).map(p => p.textContent);
+                const text = lines.join('\n');
+
+                // Determine if the poem is currently saved
+                const isSaved = this.classList.contains('bi-heart-fill');
+                const endpoint = isSaved ? '/unsave-poem' : '/save-poem';
+
+                try {
+                    // Create form data
+                    const formData = new FormData();
+                    formData.append('title', title);
+
+                    // Only include author and text for saving
+                    if (!isSaved) {
+                        formData.append('author', author);
+                        formData.append('text', text);
+                    }
+
+                    // Send request
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        // Toggle heart icon (keep your existing toggle logic)
+                        this.classList.toggle('bi-heart-fill');
+                        this.classList.toggle('bi-heart');
+
+                        // Optional: Show success message
+                        const data = await response.json();
+                        console.log(data.message);
+                    } else {
+                        const error = await response.json();
+                        console.error('Error:', error);
+                        // Silent error handling to maintain UI experience
+                        console.error('Failed to update favorite status:', error.error);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    // Silent error handling to maintain UI experience
+                    console.error('Failed to update favorite status:', error);
+                }
+            });
+        });
+    });
+
+    /* Keep your existing fade-in animation */
+    window.addEventListener('load', () => {
+        const cardBody = document.querySelector('.card-body');
+        cardBody.classList.add('fade-in');
+    });
+</script>
+
+{% endblock %}

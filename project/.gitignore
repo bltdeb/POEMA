@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.env
+.venv
+
+# Flask
+instance/
+.webassets-cache
+flask_session/
+
+# Database
+*.db
+*.sqlite3
+*.db-journal
+
+# Configuration files containing sensitive data
+config.py
+.env
+.flaskenv
+*.cfg
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+logs/
+log/
+
+# Test coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*.cover
+
+# Do not ignore these files
+!config.example.py
+!.env.example

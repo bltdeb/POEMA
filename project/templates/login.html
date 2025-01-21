@@ -1,6 +1,30 @@
 {% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+{% endblock %}
+
 {% block title %}Login{% endblock %}
 
 {% block main %}
+<!--Implementation of Bootstrap Form. Source: https://bootstrapexamples.com/@prajwal/simple-login-form-2-->
+<div class="container">
+    <h2 class="text-center">Login</h2>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form class="login-form" action="/login" method="POST">
+                <div class="form-group">
+                    <input type="text" id="username" name="username" placeholder="Your username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" placeholder="Your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
 
+                <p>Don't have an account? <a href="{{ url_for('register') }}" class="link-info">Register here</a></p>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

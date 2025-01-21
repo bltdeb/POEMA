@@ -1,0 +1,53 @@
+.results-bar {
+font-family: Garamond, serif;
+margin-top: 20px;
+}
+.card-body {
+background-color: #faf9f9;
+font-family: Garamond, serif;
+}
+
+.favorite-container {
+    float: right;
+    border-width: thin;
+  }
+  .bi-heart {
+    font-size: 30px; /* Adjust the size as needed */
+    color:#63686e;
+  }
+  .bi-heart-fill {
+    font-size: 30px; /* Adjust the size as needed */
+    color:#63686e;
+    color: #c13131;
+  }
+.card-subtitle {
+    margin-bottom: 50px; 
+  }
+.card-title {
+    font-weight: bold;
+}
+
+.page-link {
+color:  #8594e4;
+background-color:white;
+border-color:  #8594e4;
+}
+  
+.page-link:hover {
+color: white;
+background-color:  #8594e4;
+border-color: #8594e4;
+  }
+.page-item {
+color: #8594e4;
+background-color:white;
+border-color:  #8594e4;
+}
+
+.pagination .page-item.active .page-link {
+    /* Styles for the active page link */
+    z-index: 1;
+    color: #fff;
+    background-color: #8594e4;
+    border-color: #8594e4;
+  }
