@@ -47,7 +47,7 @@ This is the python file that handles the backend for the POEMA web app. The firs
 
 7. save poem route - the save poem route is triggered by the JavaScript event listener linked to /save-poem. It checks whether the poem is already saved in the user's database. If the poem isn't saved yet, it will be inserted in the user's database. If the poem is already saved, an error will be returned.
 
-8. unsave poem route - 
+8. unsave poem route - the unsave poem route is triggered by the Javascript event listener linked to /unsave-poem. It first extracts data from the resuest (title and user_id) and removes the poem from user's database. 
 
-9. get saved poems route - 
+9. get saved poems route - the get saved poems route is specifically designed for the favorites page. It first counts the number of poems saved in the user's database, then queries the database to retrieve these poems, ensuring they are displayed on the favorites page.
 
