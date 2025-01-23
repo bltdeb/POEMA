@@ -8,6 +8,13 @@
 {% block title %}Login{% endblock %}
 
 {% block main %}
+  <!-- Display message if it exists -->
+  {% if message %}
+  <div class="alert 
+              {% if message_type == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+      {{ message }}
+  </div>
+{% endif %}
 <!--Implementation of Bootstrap Form. Source: https://bootstrapexamples.com/@prajwal/simple-login-form-2-->
 <div class="container">
     <h2 class="text-center">Login</h2>

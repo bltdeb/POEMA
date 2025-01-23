@@ -92,7 +92,6 @@ def search():
     if not search_query:
         return render_template('index.html', error="Please enter a search term")
     
-    # TODO: handle also the possibility of input not found
 
     try:
         # Search by author name
@@ -268,10 +267,10 @@ def change_password():
     conn.commit()
     conn.close()
 
-    # Flash success message
-    flash("Password changed successfully!", "success")
+    return render_template("login.html", message="Password changed successfully! Please log in with your new password.", message_type="success")
      # Log user out and redirect user to the login page
     logout()
+    
 
     return redirect("/")
 
